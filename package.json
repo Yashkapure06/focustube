@@ -7,7 +7,7 @@
   },
   "description": "Watch YouTube videos inside VS Code without distractions",
   "version": "0.1.0",
-  "publisher": "focustube",
+  "publisher": "YashKapure",
   "engines": {
     "vscode": "^1.74.0"
   },
