@@ -1,0 +1,89 @@
+{
+  "name": "focustube",
+  "displayName": "FocusTube",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yashkapure06/focustube"
+  },
+  "description": "Watch YouTube videos inside VS Code without distractions",
+  "version": "0.1.0",
+  "publisher": "focustube",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "youtube",
+    "video",
+    "player",
+    "focus",
+    "productivity"
+  ],
+  "icon": "media/icon.png",
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "focustube.open",
+        "title": "FocusTube: Open",
+        "category": "FocusTube"
+      },
+      {
+        "command": "focustube.saveTimestamp",
+        "title": "FocusTube: Save Timestamp",
+        "category": "FocusTube"
+      },
+      {
+        "command": "focustube.showSavedClips",
+        "title": "FocusTube: Show Saved Clips",
+        "category": "FocusTube"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "focustube.sidebar",
+          "name": "FocusTube",
+          "icon": "$(play-circle)",
+          "contextualTitle": "FocusTube"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "focustube.open"
+        },
+        {
+          "command": "focustube.saveTimestamp"
+        },
+        {
+          "command": "focustube.showSavedClips"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "focustube.saveTimestamp",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s",
+        "when": "focusedView == focustube.sidebar"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.3.0"
+  }
+}
