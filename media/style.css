@@ -1,0 +1,365 @@
+/* FocusTube — VS Code sidebar stylesheet */
+/* Uses VS Code CSS custom properties so it adapts to any theme automatically. */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --ft-gap:    8px;
+  --ft-radius: 4px;
+  --ft-trans:  0.12s ease;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family:    var(--vscode-font-family);
+  font-size:      var(--vscode-font-size, 13px);
+  line-height:    1.4;
+  color:          var(--vscode-foreground);
+  background:     var(--vscode-sideBar-background, #1e1e1e);
+}
+
+#app {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--ft-gap);
+  padding:        var(--ft-gap);
+  min-height:     100vh;
+}
+
+/* ── Sections ─────────────────────────────────────────────────────────────── */
+
+section {
+  display:        flex;
+  flex-direction: column;
+  gap:            6px;
+}
+
+section.hidden {
+  display: none !important;
+}
+
+#clips-section {
+  border-top: 1px solid var(--vscode-sideBarSectionHeader-border, rgba(255,255,255,0.08));
+  padding-top: var(--ft-gap);
+  margin-top:  2px;
+}
+
+.section-head {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  margin-bottom:   2px;
+}
+
+.section-title {
+  font-size:      10px;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity:        0.55;
+}
+
+/* ── Inputs ───────────────────────────────────────────────────────────────── */
+
+.input-row {
+  display: flex;
+  gap:     4px;
+}
+
+input[type="text"] {
+  flex:        1;
+  padding:     5px 8px;
+  background:  var(--vscode-input-background);
+  color:       var(--vscode-input-foreground);
+  border:      1px solid var(--vscode-input-border, transparent);
+  border-radius: var(--ft-radius);
+  font-family: inherit;
+  font-size:   inherit;
+  outline:     none;
+  min-width:   0;
+  transition:  border-color var(--ft-trans);
+}
+
+input[type="text"]:focus {
+  border-color: var(--vscode-focusBorder);
+}
+
+input[type="text"]::placeholder {
+  color:   var(--vscode-input-placeholderForeground);
+  opacity: 1;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+
+.btn {
+  display:        inline-flex;
+  align-items:    center;
+  justify-content: center;
+  padding:        5px 10px;
+  border:         none;
+  border-radius:  var(--ft-radius);
+  cursor:         pointer;
+  font-family:    inherit;
+  font-size:      inherit;
+  white-space:    nowrap;
+  transition:     background var(--ft-trans), opacity var(--ft-trans);
+  user-select:    none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 1px;
+}
+
+/* Primary */
+.btn-primary {
+  background: var(--vscode-button-background);
+  color:      var(--vscode-button-foreground);
+  flex-shrink: 0;
+}
+.btn-primary:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+/* Secondary */
+.btn-secondary {
+  background: var(--vscode-button-secondaryBackground, var(--vscode-input-background));
+  color:      var(--vscode-button-secondaryForeground, var(--vscode-foreground));
+  border:     1px solid var(--vscode-input-border, rgba(255,255,255,0.1));
+  width:      100%;
+}
+.btn-secondary:hover {
+  background: var(--vscode-button-secondaryHoverBackground, rgba(255,255,255,0.08));
+}
+
+/* Icon */
+.btn-icon {
+  padding:    3px 6px;
+  background: transparent;
+  color:      var(--vscode-foreground);
+  opacity:    0.55;
+  font-size:  14px;
+  line-height: 1;
+}
+.btn-icon:hover {
+  opacity:    1;
+  background: var(--vscode-toolbar-hoverBackground, rgba(255,255,255,0.1));
+}
+
+/* Close icon — slightly red on hover */
+.btn-close:hover {
+  color: var(--vscode-editorError-foreground, #f48771);
+}
+
+/* Danger */
+.btn-danger {
+  background: var(--vscode-inputValidation-errorBackground, rgba(120,30,30,0.9));
+  color:      var(--vscode-inputValidation-errorForeground, #f48771);
+}
+.btn-danger:hover {
+  opacity: 0.85;
+}
+
+/* Extra small */
+.btn-xs {
+  padding:   2px 8px;
+  font-size: 11px;
+}
+
+.hidden { display: none !important; }
+
+/* ── Error message ────────────────────────────────────────────────────────── */
+
+.error-msg {
+  display:    none;
+  font-size:  11px;
+  color:      var(--vscode-inputValidation-errorForeground, #f48771);
+  padding:    3px 2px;
+  white-space: pre-wrap;
+}
+
+/* ── Player bar ───────────────────────────────────────────────────────────── */
+
+#player-bar {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  gap:             6px;
+  min-height:      24px;
+}
+
+.video-label {
+  font-size:     11px;
+  opacity:       0.6;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+  flex:          1;
+}
+
+.bar-actions {
+  display:    flex;
+  gap:        2px;
+  flex-shrink: 0;
+}
+
+/* ── Player wrapper — 16:9 aspect ratio ───────────────────────────────────── */
+
+#player-wrap {
+  position:      relative;
+  width:         100%;
+  padding-top:   56.25%;   /* 16:9 */
+  background:    #000;
+  border-radius: var(--ft-radius);
+  overflow:      hidden;
+  transition:    padding-top 0.25s ease;
+}
+
+/* YouTube IFrame API replaces #yt-player div with an <iframe> */
+#player-wrap > div,
+#player-wrap iframe {
+  position: absolute;
+  inset:    0;
+  width:    100%;
+  height:   100%;
+  border:   none;
+}
+
+/* ── Mini mode ────────────────────────────────────────────────────────────── */
+
+#app.mini #player-wrap {
+  padding-top: 28%;   /* smaller but still watchable */
+}
+
+#app.mini #url-section,
+#app.mini #ts-row,
+#app.mini .video-label {
+  display: none;
+}
+
+#app.mini #player-bar {
+  justify-content: flex-end;
+}
+
+/* ── Timestamp row ────────────────────────────────────────────────────────── */
+
+#ts-row {
+  display:        flex;
+  flex-direction: column;
+  gap:            4px;
+}
+
+/* ── Clips list ───────────────────────────────────────────────────────────── */
+
+#clips-list {
+  display:        flex;
+  flex-direction: column;
+  gap:            2px;
+}
+
+.empty-hint {
+  font-size:  12px;
+  opacity:    0.45;
+  text-align: center;
+  padding:    18px 0;
+  font-style: italic;
+}
+
+.clip {
+  display:       flex;
+  align-items:   center;
+  border-radius: var(--ft-radius);
+  transition:    background var(--ft-trans);
+  gap:           2px;
+}
+
+.clip:hover {
+  background: var(--vscode-list-hoverBackground);
+}
+
+/* clip-body is a <button> that acts as the clickable row */
+.clip-body {
+  flex:        1;
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  padding:     6px 6px 6px 8px;
+  background:  transparent;
+  border:      none;
+  cursor:      pointer;
+  color:       inherit;
+  font-family: inherit;
+  font-size:   inherit;
+  text-align:  left;
+  border-radius: var(--ft-radius);
+  min-width:   0;
+}
+
+.clip-body:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+}
+
+.clip-ts {
+  font-family: var(--vscode-editor-font-family, 'Courier New', monospace);
+  font-size:   11px;
+  font-weight: 700;
+  color:       var(--vscode-textLink-foreground, #4e9ae1);
+  flex-shrink: 0;
+  min-width:   36px;
+}
+
+.clip-meta {
+  display:        flex;
+  flex-direction: column;
+  gap:            1px;
+  min-width:      0;
+}
+
+.clip-note {
+  font-size:     12px;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+  display:       block;
+}
+
+.clip-note em {
+  opacity:    0.4;
+  font-style: italic;
+}
+
+.clip-date {
+  font-size: 10px;
+  opacity:   0.4;
+}
+
+.btn-del {
+  opacity:    0;
+  font-size:  11px;
+  flex-shrink: 0;
+  transition: opacity var(--ft-trans), color var(--ft-trans);
+}
+
+.clip:hover .btn-del {
+  opacity: 0.5;
+}
+.clip:hover .btn-del:hover {
+  opacity: 1;
+  color:   var(--vscode-editorError-foreground, #f48771);
+}
+
+/* ── High-contrast theme adjustments ─────────────────────────────────────── */
+
+@media (forced-colors: active) {
+  .btn { border: 1px solid ButtonText; }
+  input[type="text"] { border: 1px solid ButtonText; }
+}
