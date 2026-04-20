@@ -162,7 +162,6 @@
         playsinline: 1,
         enablejsapi: 1,
         host: host, // Smart fallback: privacy-enhanced → standard
-        origin: location.origin,
       },
       events: {
         onError: (err) => onPlayerError(err, videoId, startTime),
