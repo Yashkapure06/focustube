@@ -153,17 +153,19 @@
     player = new YT.Player("yt-player", {
       videoId,
       playerVars: {
-        rel: 0, // no related videos at end
-        modestbranding: 1, // minimal YouTube branding
+        rel: 0,
         autoplay: 1,
         start: startTime,
-        iv_load_policy: 3, // hide annotations
-        fs: 1, // allow fullscreen
+        iv_load_policy: 3,
+        fs: 1,
         playsinline: 1,
         enablejsapi: 1,
-        origin: location.origin, // Required for YouTube API
       },
       events: {
+        onReady: (e) => {
+          const data = e.target.getVideoData();
+          if (data && data.title) setVideoLabel(data.title);
+        },
         onError: (err) => onPlayerError(err, videoId, startTime),
       },
     });
