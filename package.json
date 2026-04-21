@@ -6,7 +6,7 @@
     "url": "https://github.com/Yashkapure06/focustube"
   },
   "description": "Watch YouTube videos inside VS Code without distractions",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "publisher": "YashKapure",
   "engines": {
     "vscode": "^1.74.0"

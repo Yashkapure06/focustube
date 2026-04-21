@@ -13,7 +13,6 @@
   let clips = [];
   let ytReady = false; // YouTube IFrame API loaded
   let pendingLoad = null; // { videoId, startTime } queued before API ready
-  let privacyModeFailed = new Set(); // Videos that don't support privacy mode
 
   // ─── DOM refs ─────────────────────────────────────────────────────────────
   const $ = (id) => document.getElementById(id);
@@ -34,7 +33,7 @@
   window.onYouTubeIframeAPIReady = function () {
     ytReady = true;
     if (pendingLoad) {
-      createOrLoadPlayer(pendingLoad.videoId, pendingLoad.startTime, false);
+      createOrLoadPlayer(pendingLoad.videoId, pendingLoad.startTime);
       pendingLoad = null;
     }
   };
@@ -117,6 +116,14 @@
       return;
     }
 
+    // YouTube Shorts cannot be embedded in iframe
+    if (raw.includes("/shorts/")) {
+      showError(
+        "YouTube Shorts cannot be embedded.\nTry a regular video: youtube.com/watch?v=VIDEO_ID",
+      );
+      return;
+    }
+
     clearError();
     currentUrl = raw;
     currentVideoId = parsed.videoId;
@@ -132,9 +139,9 @@
     createOrLoadPlayer(parsed.videoId, parsed.startTime);
   }
 
-  function createOrLoadPlayer(videoId, startTime, forceStandardHost) {
+  function createOrLoadPlayer(videoId, startTime) {
     setVideoLabel("");
-    if (player && !forceStandardHost) {
+    if (player) {
       // Reuse existing player instance — just swap the video
       player.loadVideoById({ videoId, startSeconds: startTime });
       return;
@@ -142,13 +149,6 @@
 
     // First-time init or retry: recreate the target div (destroyed on close)
     resetPlayerDiv();
-
-    // Smart host selection: try privacy mode first, fall back if needed
-    const usePrivacyMode =
-      !forceStandardHost && !privacyModeFailed.has(videoId);
-    const host = usePrivacyMode
-      ? "https://www.youtube-nocookie.com"
-      : "https://www.youtube.com";
 
     player = new YT.Player("yt-player", {
       videoId,
@@ -161,7 +161,7 @@
         fs: 1, // allow fullscreen
         playsinline: 1,
         enablejsapi: 1,
-        host: host, // Smart fallback: privacy-enhanced → standard
+        origin: location.origin, // Required for YouTube API
       },
       events: {
         onError: (err) => onPlayerError(err, videoId, startTime),
@@ -177,30 +177,8 @@
       100: "Video not found or is private.",
       101: "The video owner has disabled embedding.",
       150: "The video owner has disabled embedding.",
-      153: "Video player configuration error. Retrying...",
+      153: "Video player configuration error.",
     };
-
-    // Error 5 or 153: Privacy mode not supported, try standard YouTube
-    if (
-      (errorCode === 5 || errorCode === 153) &&
-      videoId &&
-      !privacyModeFailed.has(videoId)
-    ) {
-      privacyModeFailed.add(videoId);
-      setVideoLabel("Retrying with standard YouTube...");
-      // Destroy current player and retry with standard domain
-      if (player) {
-        try {
-          player.destroy();
-        } catch (_) {}
-        player = null;
-      }
-      setTimeout(() => {
-        createOrLoadPlayer(videoId, startTime, true);
-      }, 500);
-      return;
-    }
-
     showError(msgs[errorCode] || `Playback error (code ${errorCode}).`);
   }
 
@@ -313,7 +291,7 @@
         urlInput.value = url;
         showPlayerSection();
         if (ytReady) {
-          createOrLoadPlayer(videoId, time, false);
+          createOrLoadPlayer(videoId, time);
         } else {
           pendingLoad = { videoId, startTime: time };
         }

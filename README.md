@@ -156,17 +156,18 @@ Open the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and search for:
 FocusTube recognises all common YouTube URL patterns:
 
 ```
-https://www.youtube.com/watch?v=dQw4w9WgXcQ
-https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=90
-https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=1h2m30s
-https://youtu.be/dQw4w9WgXcQ
-https://youtu.be/dQw4w9WgXcQ?t=90
-https://www.youtube.com/embed/dQw4w9WgXcQ?start=90
-https://www.youtube.com/shorts/dQw4w9WgXcQ
-https://www.youtube.com/live/dQw4w9WgXcQ
+
 ```
 
-**Invalid URLs** (non-YouTube links, playlists without a video ID, malformed URLs) are rejected with a clear error message.
+**⚠️ NOT Supported:**
+
+- **YouTube Shorts** — Cannot be embedded in iframes (technical limitation)
+- Playlists (use individual video URLs instead)
+- Non-YouTube links
+- Private or age-restricted videos
+- Videos with embedding disabled by the uploader
+
+**Invalid URLs** are rejected with a clear error message.
 
 ---
 
